@@ -6,6 +6,8 @@
 
 #include <GLFW/glfw3.h>
 
+//Define tamano de ventana
+
 const GLint WIDTH = 800, HEIGHT = 600;
 
 // Shaders
