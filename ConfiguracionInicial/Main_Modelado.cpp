@@ -23,6 +23,9 @@ float movX=0.0f;
 float movY=0.0f;
 float movZ=-5.0f;
 float rot = 0.0f;
+//Constantes nuevas para la rotacion en los ejes
+float rotX = 0.0f;
+float rotZ = 0.0f;
 int main() {
 	glfwInit();
 	//Verificación de compatibilidad 
@@ -186,8 +189,13 @@ int main() {
 	
 		//traslacion sibre la vista con respecto a variables
 		view = glm::translate(view, glm::vec3(movX,movY, movZ));
-		//rotacion rot es la variable de grados, se esta rotando sobre el eje y
+		//rotacion rot es la variable de grados,
+		// Rotacion en eje x
+		view = glm::rotate(view, glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f));
+		//Rotacion en eje y
 		view = glm::rotate(view, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0f));
+		// Rotacion en eje z
+		view = glm::rotate(view, glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
 
 
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
@@ -208,9 +216,39 @@ int main() {
 		model = glm::scale(model, glm::vec3(2.0f, 0.2f, 3.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
 
-				
+		//Poner 4 patas a la mesa
+		//Pata frontal izquierda
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(-0.2f, 2.0f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//Pata frontal derecha
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(-0.2f, 2.0f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//Pata trasera izquierda
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-0.5f, 0.0f, -1.0f));
+		model = glm::scale(model, glm::vec3(-0.2f, 2.0f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//Pata trasera derecha
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, -1.0f));
+		model = glm::scale(model, glm::vec3(-0.2f, 2.0f, 0.2f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		glBindVertexArray(0);
+		
+
+		//segundo ejercicio aplicar rotacion sobre eje x y z
+
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
@@ -243,6 +281,20 @@ int main() {
 		 rot += 0.4f;
 	 if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		 rot -= 0.4f;
+	 //Nuevas teclas
+	 // rotacion en x con flechas arriba y abajo
+	 // con movimiento positivo y negativo respectivamente
+	 if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		 rotX += 0.4f;
+	 if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		 rotX -= 0.4f;
+	 // Rotacion en eje z con teclas z y x 
+	 // con movimiento positivo y negativo respectivamente
+	 if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+		 rotZ += 0.4f;
+	 if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+		 rotZ -= 0.4f;
+
  }
 
 
