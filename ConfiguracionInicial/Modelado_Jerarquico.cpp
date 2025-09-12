@@ -15,6 +15,7 @@ void Inputs(GLFWwindow *window);
 const GLint WIDTH = 1200, HEIGHT = 800;
 
 //For Keyboard
+//movimientos de camara
 float	movX = 0.0f,
 movY = 0.0f,
 movZ = -5.0f,
@@ -22,7 +23,9 @@ rot = 0.0f;
 
 //For model
 float	hombro = 0.0f;
-
+//Nueva variable codo
+float codo = 0.0f,
+mano = 0.0f;
 
 int main() {
 	glfwInit();
@@ -173,7 +176,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 
 
-		
+		//creacion de matrices
 		ourShader.Use();
 		glm::mat4 model=glm::mat4(1);
 		glm::mat4 view=glm::mat4(1);
@@ -200,6 +203,7 @@ int main() {
 		glBindVertexArray(VAO);
 		
 		//Model 
+		//modeltemp es un guardado de status, actua como checkpoint
 		model = glm::rotate(model, glm::radians(hombro), glm::vec3(0.0f, 0.0, 1.0f)); //hombro
 		modelTemp = model = glm::translate(model, glm::vec3(1.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 1.0f, 1.0f));
@@ -208,6 +212,25 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//A
 
+		//Realizamos el codo
+		model = glm::translate(modelTemp, glm::vec3(1.5f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(codo), glm::vec3(0.0f, 1.0, 0.0f)); //codo
+		modelTemp = model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0f));
+		color = glm::vec3(1.0f, 0.0f, 0.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//B
+
+		//Rotacion sobre el eje x, en un nueva sección de 0.5
+		model = glm::translate(modelTemp, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mano), glm::vec3(1.0f, 0.0, 0.0f)); //mano
+		modelTemp = model = glm::translate(model, glm::vec3(0.25f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//B
 
 		glBindVertexArray(0);
 
@@ -247,6 +270,14 @@ int main() {
 		 hombro += 0.18f;
 	 if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		 hombro -= 0.18f;
+	 if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+		 codo += 0.18f;
+	 if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+		 codo -= 0.18f;
+	 if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
+		 mano += 0.18f;
+	 if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+		 mano -= 0.18f;
  }
 
 
