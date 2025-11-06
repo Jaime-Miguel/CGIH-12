@@ -266,7 +266,7 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-
+        //Segunda fuente de luz
         lampshader.Use();
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos2 + movelight2Pos);
